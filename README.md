@@ -3,3 +3,5 @@
 Neste repositório se encontra: 
 
 - Código PHP, baseado no [código template da AWS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Tutorials.WebServerDB.CreateDBInstance.html)
+
+- [Vídeo](https://youtu.be/TV1IvvmxZ1U)

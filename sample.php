@@ -1,90 +1,203 @@
 <?php include "../inc/dbinfo.inc"; ?>
 <html>
-<body>
-<h1>Sample page</h1>
-<?php
+  <head>
+      <style>
+          .center-flex {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+          }
 
-  $connection = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD);
+          .center-table {
+              display: flex;
+              justify-content: center;
+              align-items: space-evenly;
+          }	
 
-  if (mysqli_connect_errno()) echo "Failed to connect to MySQL: " . mysqli_connect_error();
+          .full-width {
+              width: 100%;
+          }
 
-  $database = mysqli_select_db($connection, DB_DATABASE);
+          .table-container {
+              width: 80vw;
+          }
 
-  VerifyEmployeesTable($connection, DB_DATABASE);
+          .flex-space-between {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+          }
 
-  $employee_name = htmlentities($_POST['NAME']);
-  $employee_address = htmlentities($_POST['ADDRESS']);
-  $employee_immigrant = isset($_POST['IMMIGRANT']) ? 1 : 0;
-  $employee_age = intval($_POST['AGE']);
+          .input-age {
+              width: 10em;
+          }
 
-  if (strlen($employee_name) || strlen($employee_address)) {
-    AddEmployee($connection, $employee_name, $employee_address, $employee_immigrant, $employee_age);
-  }
-?>
+          .radio-choices {
+              display: flex;
+              justify-content: space-between;
+              width: 10em;
+          }
 
-<!-- Input form -->
-<form action="<?PHP echo $_SERVER['SCRIPT_NAME'] ?>" method="POST">
-  <table border="0">
-    <tr>
-      <td>NAME</td>
-      <td>ADDRESS</td>
-      <td>IMMIGRANT</td>
-      <td>AGE</td>
-    </tr>
-    <tr>
-      <td>
-        <input type="text" name="NAME" maxlength="45" size="30" />
-      </td>
-      <td>
-        <input type="text" name="ADDRESS" maxlength="90" size="60" />
-      </td>
-      <td>
-        <input type="checkbox" name="IMMIGRANT" value="1">
-      </td>
-      <td>
-        <input type="number" name="AGE" min="0" max="150">
-      </td>
-      <td>
-        <input type="submit" value="Add Data" />
-      </td>
-    </tr>
-  </table>
-</form>
+          .radio-squares {
+              width: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: space-evenly;
+          }
 
-<!-- Display table data. -->
-<table border="1" cellpadding="2" cellspacing="2">
-  <tr>
-    <td>ID</td>
-    <td>NAME</td>
-    <td>ADDRESS</td>
-    <td>IMMIGRANT</td>
-    <td>AGE</td>
-  </tr>
+          input {
+              margin: 1% 0;
+              border: 1px solid;
+              padding: 0.5%;
+          }
 
-<?php
+          tr {
+              margin: 1% 0;
+          }
 
-$result = mysqli_query($connection, "SELECT * FROM EMPLOYEES");
+          input[type="submit"]:hover {
+              background-color: gray;
+              color: white;
+              border: 1px solid black;
+              cursor: pointer;
+          }
 
-while($query_data = mysqli_fetch_row($result)) {
-  echo "<tr>";
-  echo "<td>",$query_data[0], "</td>",
-       "<td>",$query_data[1], "</td>",
-       "<td>",$query_data[2], "</td>",
-       "<td>",$query_data[3], "</td>",
-       "<td>",$query_data[4], "</td>";
-  echo "</tr>";
-}
-?>
+          input[type='radio'] {
+              box-sizing: border-box;
+              appearance: none;
+              background: white;
+              outline: 2px solid #333;
+              border: 3px solid white;
+              width: 16px;
+              height: 16px;
+            }
+            
+          input[type='radio']:checked {
+              background: green;
+              border: 3px solid green;
+          }
 
-</table>
+          table {
+              width: 80%;
+          }
 
-<!-- Clean up. -->
-<?php
-  mysqli_free_result($result);
-  mysqli_close($connection);
-?>
+          .small-head {
+            width: 13%;
+          }
 
-</body>
+          .big-head {
+              width: 30.5%;
+          }
+
+      </style>
+  </head>
+  <body>
+    <div class="center-flex">
+        <h1>TRAVEL REGISTRY</h1>
+    </div>
+
+    <?php
+
+      $connection = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD);
+
+      if (mysqli_connect_errno()) echo "Failed to connect to MySQL: " . mysqli_connect_error();
+
+      $database = mysqli_select_db($connection, DB_DATABASE);
+
+      VerifyEmployeesTable($connection, DB_DATABASE);
+
+      $employee_name = htmlentities($_POST['NAME']);
+      $employee_address = htmlentities($_POST['ADDRESS']);
+      $employee_immigrant = $_POST['IMMIGRANT'] == "1" ? 1 : 0;
+      $employee_age = intval($_POST['AGE']);
+
+      if (strlen($employee_name) || strlen($employee_address)) {
+        AddEmployee($connection, $employee_name, $employee_address, $employee_immigrant, $employee_age);
+      }
+    ?>
+
+    <div class="center-flex">
+      <form action="<?PHP echo $_SERVER['SCRIPT_NAME'] ?>" method="POST">
+        <table class="table-container" border="0">
+            <tr>
+                <td>NAME</td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" name="NAME" maxlength="45" class="full-width" />
+                </td>
+            </tr>
+            <tr>
+                <td>ADDRESS</td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" name="ADDRESS" maxlength="90" class="full-width" />
+                </td>
+            </tr>
+            <tr class="flex-space-between">
+                <td>IMMIGRANT</td>
+                <td class="radio-choices">
+                    <div class="radio-squares">
+                        <input type="radio" name="IMMIGRANT" value="1" id="yes" checked> <label for="yes">YES</label>
+                    </div>
+                    <div class="radio-squares">
+                        <input type="radio" name="IMMIGRANT" value="0" id="no"> <label for="no">NO</label>
+                    </div>
+                </td>                      
+            </tr>
+            <tr class="flex-space-between">
+                <td>AGE</td>
+                <td>
+                    <input type="number" name="AGE" min="0" max="99" class="input-age">
+                </td>
+            </tr>
+            <td>
+                <input type="submit" value="Add Data" class="full-width" />
+            </td>
+        </table>
+      </form>
+    </div>
+    
+    <div class="center-flex">
+        <h1>REGISTRY HISTORY</h1>
+    </div>
+
+    <div class="center-flex">
+      <table border="1">
+        <thead>
+          <tr>
+              <th class="small-head">ID</th>
+              <th class="big-head">NAME</th>
+              <th class="big-head">ADDRESS</th>
+              <th class="small-head">IMMIGRANT</th>
+              <th class="small-head">AGE</th>
+          </tr>
+        </thead>
+
+      <?php
+
+      $result = mysqli_query($connection, "SELECT * FROM EMPLOYEES");
+
+      while($query_data = mysqli_fetch_row($result)) {
+        echo "<tr>";
+        echo "<td>",$query_data[0], "</td>",
+            "<td>",$query_data[1], "</td>",
+            "<td>",$query_data[2], "</td>",
+            "<td>",$query_data[3], "</td>",
+            "<td>",$query_data[4], "</td>";
+        echo "</tr>";
+      }
+      ?>
+
+      </table>
+    </div>
+
+    <?php
+      mysqli_free_result($result);
+      mysqli_close($connection);
+    ?>
+  </body>
 </html>
 
 
